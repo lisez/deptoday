@@ -14,7 +14,7 @@ export class DenoJsonScanner implements Scanner {
 
   async scan(path: string): Promise<DependencyProfile[]> {
     const record = await DenoJsonScanner.load(path).then((json) =>
-      Object.values(json.imports as Record<string, string>)
+      Object.values((json?.imports || {}) as Record<string, string>)
     );
     return InlineScanner.Multiple(record).then((e) => {
       e.forEach((d) => {
