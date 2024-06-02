@@ -1,6 +1,6 @@
 import type { DependencyProfile, Scanner } from '../types.ts';
 
-import { Es6FileScanner } from './es6.ts';
+import { EsmFileScanner } from './esm.ts';
 
 export class TypeScriptFileScanner implements Scanner {
   static guard(path: string): boolean {
@@ -9,7 +9,7 @@ export class TypeScriptFileScanner implements Scanner {
 
   async scan(path: string): Promise<DependencyProfile[]> {
     const content = await Deno.readTextFile(path);
-    const matches = await new Es6FileScanner().scan(content);
+    const matches = await new EsmFileScanner().scan(content);
     matches.forEach((d) => d.files.push(path));
     return matches;
   }
