@@ -1,4 +1,9 @@
 {
+  "name": "@lisez/deptoday",
+  "version": "0.1.1",
+  "publish": {
+    "include": ["modules", "README.md", "LICENSE", "deno.json", "deno.lock"]
+  },
   "fmt": {
     "useTabs": false,
     "lineWidth": 80,
