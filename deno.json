@@ -1,6 +1,6 @@
 {
   "imports": {
-    "module/*": "./modules/"
+    "modules/": "./modules/"
   },
   "fmt": {
     "useTabs": false,
