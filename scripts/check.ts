@@ -4,6 +4,10 @@ import { DependencyRegistryProfile } from 'modules/types.ts';
 import { PathScanner } from 'modules/scanners/path.ts';
 import { Agent } from 'modules/agent.ts';
 
+const config = {
+  delay: +(parseInt(Deno.env.get('DELAY') || '', 10) || 50),
+};
+
 async function main(args: string[]) {
   const profiles = await Promise.all(
     args.map((arg) => new PathScanner().scan(arg)),
@@ -17,7 +21,7 @@ async function main(args: string[]) {
     registryProfiles.set(key, profile);
 
     // INFO: Prevent rate limiting
-    await delay(100);
+    await delay(config.delay);
   }
 
   const data: Record<string, unknown> = profiles.filter((p) =>
@@ -43,7 +47,7 @@ async function main(args: string[]) {
 }
 
 if (Deno.args.length === 0) {
-  console.error('Usage: deno run check.ts <directory>');
+  console.error('Usage: deno run scripts/check.ts <paths...>');
   Deno.exit(1);
 } else {
   await main(Deno.args);
