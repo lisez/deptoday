@@ -4,6 +4,7 @@ import { DependencyRegistryProfile } from '../modules/types.ts';
 import { PathScanner } from '../modules/scanners/path.ts';
 import { Agent } from '../modules/agent.ts';
 import { aggregate } from '../modules/helpers/aggregate.ts';
+import { UnknowVersion } from '../modules/constants.ts';
 
 const config = {
   delay: +(parseInt(Deno.env.get('DELAY') || '', 10) || 50),
@@ -28,11 +29,13 @@ async function main(args: string[]) {
   const data: Record<string, unknown> = profiles
     .filter(
       (p) =>
-        registryProfiles.get(`${p.provider}:${p.name}`)?.latest !== p.version,
+        ![p.version, p.version.replace(/^\D/, '')].includes(
+          registryProfiles.get(`${p.provider}:${p.name}`)?.latest!,
+        ),
     )
     .map((p) => {
       const latest = registryProfiles.get(`${p.provider}:${p.name}`)?.latest ??
-        'unknown';
+        UnknowVersion;
       return {
         name: p.name,
         version: p.version,
