@@ -6,7 +6,6 @@ export class DenolandInlineScanner implements Scanner {
   }
 
   async scan(path: string): Promise<DependencyProfile[]> {
-    if (!DenolandInlineScanner.guard(path)) return [];
     const url = URL.parse(path);
     if (!url) return [];
     const p = url.pathname.match(

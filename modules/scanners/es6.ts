@@ -4,14 +4,11 @@ import { JsrInlineScanner } from './jsr_inline.ts';
 import { NpmInlineScanner } from './npm_inline.ts';
 import { DenolandInlineScanner } from './denoland_inline.ts';
 
-export class DenoLockScanner implements Scanner {
-  static async load(path: string): Promise<Record<string, unknown>> {
-    const raw = await Deno.readTextFile(path);
-    return JSON.parse(raw);
-  }
+const regex = /(?:import|export|from) ["'](?<source>[^;]+)["'];/gm;
 
+export class Es6FileScanner implements Scanner {
   static guard(path: string): boolean {
-    return path.endsWith('deno.lock');
+    return regex.test(path);
   }
 
   static rules = [
@@ -22,16 +19,10 @@ export class DenoLockScanner implements Scanner {
   ];
 
   async scan(path: string): Promise<DependencyProfile[]> {
-    const record = await DenoLockScanner.load(path).then((json) => [
-      ...Object.keys(json.remote as Record<string, string>),
-      ...Object.values(
-        (json.packages as Record<string, Record<string, string>>).specifiers,
-      ),
-    ]);
-
     let profiles: DependencyProfile[] = [];
-    for (const literal of Object.values<string>(record)) {
-      for (const Rule of DenoLockScanner.rules) {
+    for (const m of path.matchAll(regex)) {
+      const literal = m.groups?.source || '';
+      for (const Rule of Es6FileScanner.rules) {
         if (Rule.guard(literal)) {
           const inlineProfiles = await new Rule().scan(literal).then((p) =>
             p.filter((e) =>
@@ -49,6 +40,7 @@ export class DenoLockScanner implements Scanner {
         }
       }
     }
+
     return profiles;
   }
 }
