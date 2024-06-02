@@ -2,27 +2,22 @@ import type { DependencyProfile, Scanner } from '../types.ts';
 
 import { InlineScanner } from './inline.ts';
 
-export class DenoLockScanner implements Scanner {
+export class DenoJsonScanner implements Scanner {
   static async load(path: string): Promise<Record<string, unknown>> {
     const raw = await Deno.readTextFile(path);
     return JSON.parse(raw);
   }
 
   static guard(path: string): boolean {
-    return path.endsWith('deno.lock');
+    return path.endsWith('deno.json');
   }
 
   async scan(path: string): Promise<DependencyProfile[]> {
-    const record = await DenoLockScanner.load(path).then((json) => [
-      ...Object.keys(json.remote as Record<string, string>),
-      ...Object.values(
-        (json.packages as Record<string, Record<string, string>>).specifiers,
-      ),
-    ]);
-
-    return InlineScanner.Multiple(Object.values(record)).then((e) => {
+    const record = await DenoJsonScanner.load(path).then((json) =>
+      Object.values(json.imports as Record<string, string>)
+    );
+    return InlineScanner.Multiple(record).then((e) => {
       e.forEach((d) => {
-        d.installed = true;
         d.files.push(path);
       });
       return e;

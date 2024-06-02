@@ -1,21 +1,36 @@
-import type { DependencyProfile, Scanner } from "../types.ts";
+import type { DependencyProfile, Scanner } from '../types.ts';
+
+import { AnyVersion } from '../constants.ts';
 
 export class JsrInlineScanner implements Scanner {
   static guard(path: string): boolean {
-    return path.startsWith("jsr:");
+    return path.startsWith('jsr:');
   }
 
   async scan(path: string): Promise<DependencyProfile[]> {
-    if (!JsrInlineScanner.guard(path)) return [];
-
-    const p = /^jsr:(@.+)@(.+)$/.exec(path);
+    const p =
+      /^jsr:(?:(?<pkg>@.+)@(?<ver>.+)|(?:(?<only_pkg>@[^/]+\/[^/]+)(?:\/.+)?))$/
+        .exec(
+          path,
+        );
     if (!p) return [];
+    if (p.groups?.only_pkg) {
+      return [
+        {
+          name: p.groups.only_pkg,
+          version: AnyVersion,
+          modifier: 'jsr',
+          provider: 'jsr',
+          files: [],
+        },
+      ];
+    }
     return [
       {
-        name: p[1],
-        version: p[2],
-        modifier: "jsr",
-        provider: "jsr",
+        name: p.groups!.pkg,
+        version: p.groups!.ver,
+        modifier: 'jsr',
+        provider: 'jsr',
         files: [],
       },
     ];

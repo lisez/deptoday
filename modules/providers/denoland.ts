@@ -1,7 +1,7 @@
 import type {
   DependencyProvider,
   DependencyRegistryProfile,
-} from "../../modules/types.ts";
+} from '../../modules/types.ts';
 
 export type DenolandResponse = {
   latest: string;
@@ -10,15 +10,15 @@ export type DenolandResponse = {
 
 export class DenolandProvider implements DependencyProvider {
   static getUrl(name: string): URL {
-    const host = "https://cdn.deno.land/";
-    return new URL(`/${name}/meta/version.json`, host);
+    const host = 'https://cdn.deno.land/';
+    return new URL(`/${name}/meta/versions.json`, host);
   }
 
   async scan(name: string): Promise<DependencyRegistryProfile> {
     const url = DenolandProvider.getUrl(name);
     const resp = await fetch(url);
     if (!resp.ok) {
-      return { name, latest: "unknown", versions: [] };
+      return { name, latest: 'unknown', versions: [] };
     }
     const data: DenolandResponse = await resp.json();
     return {
