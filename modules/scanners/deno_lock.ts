@@ -2,6 +2,7 @@ import type { DependencyProfile, Scanner } from 'modules/types.ts';
 
 import { JsrInlineScanner } from 'modules/scanners/jsr_inline.ts';
 import { NpmInlineScanner } from 'modules/scanners/npm_inline.ts';
+import { DenolandInlineScanner } from 'modules/scanners/denoland_inline.ts';
 
 export class DenoLockScanner implements Scanner {
   static async #loadFile(path: string): Promise<Record<string, string>> {
@@ -17,6 +18,7 @@ export class DenoLockScanner implements Scanner {
     //
     JsrInlineScanner,
     NpmInlineScanner,
+    DenolandInlineScanner,
   ];
 
   async scan(path: string): Promise<DependencyProfile[]> {

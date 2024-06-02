@@ -1,9 +1,8 @@
 import { delay } from 'jsr:@std/async';
 
 import { DependencyRegistryProfile } from 'modules/types.ts';
-import { JsrProvider } from 'modules/providers/jsr.ts';
-import { NpmProvider } from 'modules/providers/npm.ts';
 import { PathScanner } from 'modules/scanners/path.ts';
+import { Agent } from 'modules/agent.ts';
 
 async function main(args: string[]) {
   const profiles = await Promise.all(
@@ -14,33 +13,30 @@ async function main(args: string[]) {
   for (const p of profiles) {
     const key = `${p.provider}:${p.name}`;
     if (registryProfiles.has(key)) continue;
-    switch (p.provider) {
-      case 'npm': {
-        const provider = new NpmProvider();
-        const registryProfile = await provider.scan(p.name);
-        registryProfiles.set(key, registryProfile);
-        break;
-      }
-      case 'jsr': {
-        const provider = new JsrProvider();
-        const registryProfile = await provider.scan(p.name);
-        registryProfiles.set(key, registryProfile);
-        break;
-      }
-      default:
-        break;
-    }
+    const profile = await Agent.fetch(p);
+    registryProfiles.set(key, profile);
 
     // INFO: Prevent rate limiting
     await delay(100);
   }
 
-  const data: Record<string, unknown> = profiles.map((p) => {
+  const data: Record<string, unknown> = profiles.filter((p) =>
+    registryProfiles.get(`${p.provider}:${p.name}`)?.latest !== p.version
+  ).map((p) => {
     const latest = registryProfiles.get(`${p.provider}:${p.name}`)?.latest ??
       'unknown';
-    return { Name: p.name, Version: p.version, Latest: latest };
+    return {
+      name: p.name,
+      version: p.version,
+      latest: latest,
+      provider: p.provider,
+    };
   }).reduce((y, x) => {
-    y[x.Name] = { Version: x.Version, Latest: x.Latest };
+    y[x.name] = {
+      Provider: x.provider,
+      Version: x.version,
+      Latest: x.latest,
+    };
     return y;
   }, {} as Record<string, unknown>);
   console.table(data);
