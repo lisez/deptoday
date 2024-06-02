@@ -1,8 +1,8 @@
-import type { DependencyProfile, Scanner } from 'modules/types.ts';
+import type { DependencyProfile, Scanner } from "../types.ts";
 
 export class NpmInlineScanner implements Scanner {
   static guard(path: string): boolean {
-    return path.startsWith('npm:');
+    return path.startsWith("npm:");
   }
 
   async scan(path: string): Promise<DependencyProfile[]> {
@@ -14,8 +14,8 @@ export class NpmInlineScanner implements Scanner {
       {
         name: p[1],
         version: p[2],
-        modifier: 'npm',
-        provider: 'npm',
+        modifier: "npm",
+        provider: "npm",
         files: [],
       },
     ];

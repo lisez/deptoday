@@ -1,8 +1,8 @@
-import type { DependencyProfile, Scanner } from 'modules/types.ts';
+import type { DependencyProfile, Scanner } from "../types.ts";
 
-import { JsrInlineScanner } from 'modules/scanners/jsr_inline.ts';
-import { NpmInlineScanner } from 'modules/scanners/npm_inline.ts';
-import { DenolandInlineScanner } from 'modules/scanners/denoland_inline.ts';
+import { JsrInlineScanner } from "./jsr_inline.ts";
+import { NpmInlineScanner } from "./npm_inline.ts";
+import { DenolandInlineScanner } from "./denoland_inline.ts";
 
 export class DenoLockScanner implements Scanner {
   static async #loadFile(path: string): Promise<Record<string, string>> {
@@ -11,7 +11,7 @@ export class DenoLockScanner implements Scanner {
   }
 
   static guard(path: string): boolean {
-    return path.endsWith('deno.lock');
+    return path.endsWith("deno.lock");
   }
 
   static rules = [

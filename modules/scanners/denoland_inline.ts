@@ -1,8 +1,8 @@
-import type { DependencyProfile, Scanner } from 'modules/types.ts';
+import type { DependencyProfile, Scanner } from "../types.ts";
 
 export class DenolandInlineScanner implements Scanner {
   static guard(path: string): boolean {
-    return path.startsWith('https://deno.land/');
+    return path.startsWith("https://deno.land/");
   }
 
   async scan(path: string): Promise<DependencyProfile[]> {
@@ -14,8 +14,8 @@ export class DenolandInlineScanner implements Scanner {
       {
         name: p![1],
         version: p![2],
-        modifier: 'https',
-        provider: 'denoland',
+        modifier: "https",
+        provider: "denoland",
         files: [],
       },
     ];
