@@ -54,7 +54,10 @@ async function main(args: string[]) {
       },
       {} as Record<string, unknown>,
     );
-  console.table(data);
+
+  if (Object.keys(data).length) {
+    console.table(data);
+  }
 }
 
 if (Deno.args.length === 0) {

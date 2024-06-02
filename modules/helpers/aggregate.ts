@@ -21,10 +21,9 @@ export function aggregate(ary: DependencyProfile[]): DependencyProfile[] {
       ) {
         if (last.version === cur.version) {
           last.files.push(...cur.files);
-        } else if (last.installed && cur.version === AnyVersion) {
+        } else if (cur.version === AnyVersion) {
           last.files.push(...cur.files);
-        } else if (cur.installed && last.version === AnyVersion) {
-          last.installed = true;
+        } else if (last.version === AnyVersion) {
           last.version = cur.version;
           last.files.push(...cur.files);
         } else {
@@ -39,4 +38,3 @@ export function aggregate(ary: DependencyProfile[]): DependencyProfile[] {
     return acc;
   }, [] as DependencyProfile[]);
 }
-
