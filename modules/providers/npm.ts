@@ -1,11 +1,11 @@
 import type {
   DependencyProvider,
   DependencyRegistryProfile,
-} from 'modules/types.ts';
+} from "../../modules/types.ts";
 
 export type JsrResponse = {
   _id: string;
-  'dist-tags': {
+  "dist-tags": {
     latest: string;
   };
   versions: Record<string, unknown>;
@@ -13,7 +13,7 @@ export type JsrResponse = {
 
 export class NpmProvider implements DependencyProvider {
   static getUrl(name: string): URL {
-    const host = 'https://registry.npmjs.org/';
+    const host = "https://registry.npmjs.org/";
     return new URL(`/${name}`, host);
   }
 
@@ -21,12 +21,12 @@ export class NpmProvider implements DependencyProvider {
     const url = NpmProvider.getUrl(name);
     const resp = await fetch(url);
     if (!resp.ok) {
-      return { name, latest: 'unknown', versions: [] };
+      return { name, latest: "unknown", versions: [] };
     }
     const data: JsrResponse = await resp.json();
     return {
       name,
-      latest: data['dist-tags'].latest,
+      latest: data["dist-tags"].latest,
       versions: Object.keys(data.versions),
     };
   }

@@ -1,8 +1,8 @@
-import * as pathlib from 'jsr:@std/path';
+import * as pathlib from "jsr:@std/path";
 
-import { DependencyProfile, Scanner } from 'modules/types.ts';
-import { DirectoryScanner } from 'modules/scanners/directory.ts';
-import { FileScanner } from 'modules/scanners/file.ts';
+import { DependencyProfile, Scanner } from "../types.ts";
+import { DirectoryScanner } from "./directory.ts";
+import { FileScanner } from "./file.ts";
 
 export class PathScanner implements Scanner {
   async scan(path: string): Promise<DependencyProfile[]> {

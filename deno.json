@@ -1,7 +1,4 @@
 {
-  "imports": {
-    "modules/": "./modules/"
-  },
   "fmt": {
     "useTabs": false,
     "lineWidth": 80,

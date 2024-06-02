@@ -5,7 +5,11 @@ deno dependencies checker
 ## Usage
 
 ```bash
-deno run --allow-read --allow-net --allow-env scripts/check.ts [path]
+deno run --allow-read --allow-net --allow-env scripts/check.ts [path...]
+```
+
+```bash
+deno run --allow-env --allow-read --allow-net https://raw.githubusercontent.com/lisez/deptoday/main/scripts/check.ts [path...]
 ```
 
 ### Examples

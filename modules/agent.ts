@@ -2,11 +2,11 @@ import type {
   DependencyProfile,
   DependencyProvider,
   DependencyRegistryProfile,
-} from 'modules/types.ts';
+} from "./types.ts";
 
-import { JsrProvider } from 'modules/providers/jsr.ts';
-import { NpmProvider } from 'modules/providers/npm.ts';
-import { DenolandProvider } from 'modules/providers/denoland.ts';
+import { JsrProvider } from "./providers/jsr.ts";
+import { NpmProvider } from "./providers/npm.ts";
+import { DenolandProvider } from "./providers/denoland.ts";
 
 export class Agent implements DependencyProfile, DependencyRegistryProfile {
   static providers: Record<string, DependencyProvider> = {
@@ -18,7 +18,7 @@ export class Agent implements DependencyProfile, DependencyRegistryProfile {
   static async fetch(p: DependencyProfile): Promise<Agent> {
     const provider = Agent.providers[p.provider];
     if (!provider) {
-      return new Agent(p, { name: p.name, latest: 'unknown', versions: [] });
+      return new Agent(p, { name: p.name, latest: "unknown", versions: [] });
     }
     const registryProfile = await provider.scan(p.name);
     return new Agent(p, registryProfile);
