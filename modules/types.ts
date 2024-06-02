@@ -3,6 +3,7 @@ export type DependencyProfile = {
   version: string;
   modifier: string;
   provider: string;
+  installed?: boolean;
   files: string[];
 };
 

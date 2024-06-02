@@ -1,7 +1,6 @@
 import type { DependencyProfile, Scanner } from '../types.ts';
 
 import { InlineScanner } from './inline.ts';
-import * as helpers from '../helpers/intersect.ts';
 
 export class DenoLockScanner implements Scanner {
   static async load(path: string): Promise<Record<string, unknown>> {
@@ -21,6 +20,12 @@ export class DenoLockScanner implements Scanner {
       ),
     ]);
 
-    return InlineScanner.Multiple(Object.values(record));
+    return InlineScanner.Multiple(Object.values(record)).then((e) => {
+      e.forEach((d) => {
+        d.installed = true;
+        d.files.push(path);
+      });
+      return e;
+    });
   }
 }

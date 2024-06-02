@@ -1,5 +1,7 @@
 import type { DependencyProfile, Scanner } from '../types.ts';
 
+import { AnyVersion } from '../constants.ts';
+
 export class JsrInlineScanner implements Scanner {
   static guard(path: string): boolean {
     return path.startsWith('jsr:');
@@ -16,7 +18,7 @@ export class JsrInlineScanner implements Scanner {
       return [
         {
           name: p.groups.only_pkg,
-          version: '*',
+          version: AnyVersion,
           modifier: 'jsr',
           provider: 'jsr',
           files: [],

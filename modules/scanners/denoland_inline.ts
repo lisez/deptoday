@@ -1,5 +1,7 @@
 import type { DependencyProfile, Scanner } from '../types.ts';
 
+import { AnyVersion } from '../constants.ts';
+
 export class DenolandInlineScanner implements Scanner {
   static guard(path: string): boolean {
     return path.startsWith('https://deno.land/');
@@ -15,7 +17,7 @@ export class DenolandInlineScanner implements Scanner {
       return [
         {
           name: p.groups.only_pkg,
-          version: 'latest',
+          version: AnyVersion,
           modifier: 'https',
           provider: 'denoland',
           files: [],

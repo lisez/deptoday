@@ -9,6 +9,8 @@ export class TypeScriptFileScanner implements Scanner {
 
   async scan(path: string): Promise<DependencyProfile[]> {
     const content = await Deno.readTextFile(path);
-    return new Es6FileScanner().scan(content);
+    const matches = await new Es6FileScanner().scan(content);
+    matches.forEach((d) => d.files.push(path));
+    return matches;
   }
 }

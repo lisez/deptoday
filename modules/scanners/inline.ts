@@ -33,9 +33,6 @@ export class InlineScanner implements Scanner {
       if (Rule.guard(path)) {
         const inlineProfiles = await new Rule().scan(path);
         const newProfiles = helpers.intersect(inlineProfiles, profiles);
-        newProfiles.forEach((profile) => {
-          profile.files.push(path);
-        });
         profiles = profiles.concat(newProfiles);
       }
     }

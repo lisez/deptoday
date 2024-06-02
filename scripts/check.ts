@@ -3,6 +3,7 @@ import { delay } from 'jsr:@std/async';
 import { DependencyRegistryProfile } from '../modules/types.ts';
 import { PathScanner } from '../modules/scanners/path.ts';
 import { Agent } from '../modules/agent.ts';
+import { aggregate } from '../modules/helpers/aggregate.ts';
 
 const config = {
   delay: +(parseInt(Deno.env.get('DELAY') || '', 10) || 50),
@@ -11,7 +12,7 @@ const config = {
 async function main(args: string[]) {
   const profiles = await Promise.all(
     args.map((arg) => new PathScanner().scan(arg)),
-  ).then((p) => p.flat());
+  ).then((p) => p.flat()).then(aggregate);
 
   const registryProfiles = new Map<string, DependencyRegistryProfile>();
   for (const p of profiles) {
@@ -23,8 +24,6 @@ async function main(args: string[]) {
     // INFO: Prevent rate limiting
     await delay(config.delay);
   }
-
-  console.log(profiles);
 
   const data: Record<string, unknown> = profiles
     .filter(
