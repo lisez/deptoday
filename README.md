@@ -2,14 +2,20 @@
 
 deno dependencies checker
 
+supported:
+
+- `jsr` specifier.
+- `npm` specifier.
+- `https://deno.land` domain.
+
 ## Usage
 
 ```bash
-deno run --allow-read --allow-net --allow-env scripts/check.ts [path...]
+deno run --allow-read --allow-net --allow-env scripts/check.ts .
 ```
 
 ```bash
-deno run --allow-env --allow-read --allow-net https://raw.githubusercontent.com/lisez/deptoday/main/scripts/check.ts [path...]
+deno run --allow-env --allow-read --allow-net https://raw.githubusercontent.com/lisez/deptoday/main/scripts/check.ts .
 ```
 
 ### Examples
