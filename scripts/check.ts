@@ -24,6 +24,8 @@ async function main(args: string[]) {
     await delay(config.delay);
   }
 
+  console.log(profiles);
+
   const data: Record<string, unknown> = profiles
     .filter(
       (p) =>
